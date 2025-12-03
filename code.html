@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Your Gallery Account</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1919e6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111121",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-center bg-no-repeat bg-cover aspect-auto" data-alt="A blurred, abstract, artistic photo with soft gradients of blue and purple" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDC4aaY9qb5QyLA59vD8EMsGenZDpCZEHfqaMq8ik1OA9kAMVkCaPFNpck0YgnTmhkHL13CVweVqOt3DfrkvsqqHNK_ReLrckLvP1K17FalvbqyCDNQ39ug7_v6iwKkD-kLAf2WvUQCjL7CEi-sdgGVZKMbsBRkR_vSnpmfxuXo98gtGFtnGJuoWMku5gd1ZUVKDX9405Z8-RZAAyrg2hFCtB3jwtu7JQChBZZNVilD60_brIrOG4wybTJNA8JZbsEeXkOgliPxmthV"); filter: blur(40px) saturate(1.2); opacity: 0.25;'></div>
+</div>
+<div class="relative flex flex-col items-center justify-center w-full grow p-4 sm:p-6 md:p-8">
+<div class="flex w-full max-w-md flex-col items-center gap-4 py-8">
+<!-- App Logo -->
+<div class="flex items-center justify-center p-2 rounded-lg bg-primary mb-4">
+<span class="material-symbols-outlined text-white" style="font-size: 36px;">photo_library</span>
+</div>
+<!-- Header Text -->
+<h1 class="text-[#111118] dark:text-white tracking-light text-[32px] font-bold leading-tight text-center pb-2">Create Your Gallery</h1>
+<p class="text-center text-gray-500 dark:text-gray-400 pb-4">Join our community of art lovers.</p>
+<!-- Form -->
+<form class="w-full flex flex-col gap-4">
+<div class="flex w-full flex-col sm:flex-row gap-4">
+<!-- First Name -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="first-name">First Name</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="first-name" placeholder="Enter your first name" value=""/>
+</div>
+<!-- Last Name -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="last-name">Last Name</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="last-name" placeholder="Enter your last name" value=""/>
+</div>
+</div>
+<!-- Username -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="username">Username</label>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="username" placeholder="Choose a username" value=""/>
+<div class="text-green-500 flex border border-[#dcdce5] dark:border-gray-700 bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+<p class="text-green-600 dark:text-green-500 text-xs mt-1 px-1">Username is available!</p>
+</div>
+<!-- Email -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="email">Email</label>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="email" placeholder="your@email.com" type="email" value=""/>
+<div class="text-[#636388] flex border border-[#dcdce5] dark:border-gray-700 bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
+<span class="material-symbols-outlined"></span>
+</div>
+</div>
+</div>
+<!-- Password -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="password">Password</label>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="password" placeholder="Create a password" type="password" value=""/>
+<button class="text-[#636388] flex border border-[#dcdce5] dark:border-gray-700 bg-white/80 dark:bg-background-dark/50 items-center justify-center px-4 rounded-r-lg border-l-0 hover:bg-gray-100 dark:hover:bg-gray-800" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Confirm Password -->
+<div class="flex flex-col w-full">
+<label class="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" for="confirm-password">Confirm Password</label>
+<div class="flex w-full flex-1 items-stretch rounded-lg">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-red-500 border border-red-500 bg-white/80 h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="confirm-password" placeholder="Re-enter your password" type="password" value=""/>
+<div class="text-red-500 flex border border-red-500 bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
+<span class="material-symbols-outlined">error</span>
+</div>
+</div>
+<p class="text-red-600 dark:text-red-500 text-xs mt-1 px-1">Passwords do not match.</p>
+</div>
+<!-- CTA Button -->
+<button class="w-full mt-4 h-14 flex items-center justify-center rounded-lg bg-primary text-white text-base font-bold leading-normal transition-transform duration-200 hover:scale-105 active:scale-100" type="submit">Create Account</button>
+</form>
+<!-- Secondary Link & Terms -->
+<div class="w-full mt-6 text-center">
+<p class="text-sm text-gray-600 dark:text-gray-400">
+                        Already have an account? <a class="font-semibold text-primary hover:underline" href="#">Log In</a>
+</p>
+<p class="text-xs text-gray-500 dark:text-gray-500 mt-4">
+                        By signing up, you agree to our
+                        <a class="underline hover:text-primary" href="#">Terms of Service</a>.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</body></html>
