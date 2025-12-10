@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from './hooks/useAuth';
 
 const Register: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -11,6 +12,10 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const { registerUser, loading, error: authError } = useAuth();
 
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -67,7 +72,70 @@ const Register: React.FC = () => {
         setPasswordError('');
       }
     }
+
+    // Re-validate confirm password if it has a value
+    if (confirmPassword) {
+      setConfirmPasswordError(value !== confirmPassword ? 'Passwords do not match.' : '');
+    }
   };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    // Validate confirm password
+    if (value === '') {
+      setConfirmPasswordError('');
+    } else {
+      setConfirmPasswordError(value !== password ? 'Passwords do not match.' : '');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSuccessMessage('');
+
+    // Validate all fields before submission
+    if (!firstName || !lastName || !age || !username || !email || !password || !confirmPassword) {
+      return;
+    }
+
+    // Check for existing errors
+    if (ageError || emailError || passwordError || confirmPasswordError) {
+      return;
+    }
+
+    // Final password match check
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match.');
+      return;
+    }
+
+    // Register user with Firebase
+    const success = await registerUser(
+      {
+        firstName,
+        lastName,
+        age,
+        username,
+        email,
+      },
+      password
+    );
+
+    if (success) {
+      setSuccessMessage('Account created successfully! Welcome to Express Hahar.');
+      // Clear form
+      setFirstName('');
+      setLastName('');
+      setAge('');
+      setUsername('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    }
+  };
+
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden font-display">
       <div className="absolute inset-0 z-0">
@@ -90,18 +158,33 @@ const Register: React.FC = () => {
           {/* Header Text */}
           <h1 className="text-[#111118] dark:text-white tracking-light text-[32px] font-bold leading-tight text-center pb-2">Create Your Gallery</h1>
           <p className="text-center text-gray-500 dark:text-gray-400 pb-4">Join our community of art lovers.</p>
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="w-full p-4 mb-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+              <p className="text-green-700 dark:text-green-400 text-sm font-medium">{successMessage}</p>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {authError && (
+            <div className="w-full p-4 mb-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+              <p className="text-red-700 dark:text-red-400 text-sm font-medium">{authError}</p>
+            </div>
+          )}
+
           {/* Form */}
-          <form className="w-full flex flex-col gap-4">
+          <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex w-full flex-col sm:flex-row gap-4">
               {/* First Name */}
               <div className="flex flex-col w-full">
                 <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="first-name">First Name</label>
-                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="first-name" placeholder="Enter your first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="first-name" placeholder="Enter your first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
               </div>
               {/* Last Name */}
               <div className="flex flex-col w-full">
                 <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="last-name">Last Name</label>
-                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="last-name" placeholder="Enter your last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal" id="last-name" placeholder="Enter your last name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
               </div>
             </div>
             {/* Age */}
@@ -117,6 +200,7 @@ const Register: React.FC = () => {
                 type="number"
                 value={age}
                 onChange={handleAgeChange}
+                required
               />
               {ageError && (
                 <p className="text-red-600 dark:text-red-500 text-xs mt-1 px-1">{ageError}</p>
@@ -126,7 +210,7 @@ const Register: React.FC = () => {
             <div className="flex flex-col w-full">
               <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="username">Username</label>
               <div className="flex w-full flex-1 items-stretch rounded-lg">
-                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="username" placeholder="Choose a username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-primary border border-[#dcdce5] dark:border-gray-700 bg-white/80 focus:border-primary h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="username" placeholder="Choose a username" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 <div className="text-green-500 flex border border-[#dcdce5] dark:border-gray-700 bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
                   <span className="material-symbols-outlined">check_circle</span>
                 </div>
@@ -138,14 +222,15 @@ const Register: React.FC = () => {
               <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="email">Email</label>
               <input
                 className={`form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg dark:bg-background-dark/50 focus:outline-none focus:ring-2 border bg-white/80 h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal ${emailError
-                    ? 'text-red-600 dark:text-red-400 border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'text-[#111118] dark:text-white border-[#dcdce5] dark:border-gray-700 focus:ring-primary focus:border-primary'
+                  ? 'text-red-600 dark:text-red-400 border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'text-[#111118] dark:text-white border-[#dcdce5] dark:border-gray-700 focus:ring-primary focus:border-primary'
                   }`}
                 id="email"
                 placeholder="your@email.com"
                 type="email"
                 value={email}
                 onChange={handleEmailChange}
+                required
               />
               {emailError && (
                 <p className="text-red-600 dark:text-red-500 text-xs mt-1 px-1">{emailError}</p>
@@ -156,14 +241,15 @@ const Register: React.FC = () => {
               <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="password">Password</label>
               <input
                 className={`form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg dark:bg-background-dark/50 focus:outline-none focus:ring-2 border bg-white/80 h-14 placeholder:text-[#636388] p-[15px] text-base font-normal leading-normal ${passwordError
-                    ? 'text-red-600 dark:text-red-400 border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'text-[#111118] dark:text-white border-[#dcdce5] dark:border-gray-700 focus:ring-primary focus:border-primary'
+                  ? 'text-red-600 dark:text-red-400 border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'text-[#111118] dark:text-white border-[#dcdce5] dark:border-gray-700 focus:ring-primary focus:border-primary'
                   }`}
                 id="password"
                 placeholder="Create a password"
                 type="password"
                 value={password}
                 onChange={handlePasswordChange}
+                required
               />
               {passwordError && (
                 <p className="text-red-600 dark:text-red-500 text-xs mt-1 px-1">{passwordError}</p>
@@ -173,15 +259,46 @@ const Register: React.FC = () => {
             <div className="flex flex-col w-full">
               <label className="text-[#111118] dark:text-gray-200 text-sm font-medium leading-normal pb-2" htmlFor="confirm-password">Confirm Password</label>
               <div className="flex w-full flex-1 items-stretch rounded-lg">
-                <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111118] dark:text-white dark:bg-background-dark/50 focus:outline-none focus:ring-2 focus:ring-red-500 border border-red-500 bg-white/80 h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" id="confirm-password" placeholder="Re-enter your password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-                <div className="text-red-500 flex border border-red-500 bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0">
-                  <span className="material-symbols-outlined">error</span>
+                <input
+                  className={`form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg dark:bg-background-dark/50 focus:outline-none focus:ring-2 border bg-white/80 h-14 placeholder:text-[#636388] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal ${confirmPasswordError
+                      ? 'text-red-600 dark:text-red-400 border-red-500 focus:ring-red-500'
+                      : confirmPassword && !confirmPasswordError
+                        ? 'text-green-600 dark:text-green-400 border-green-500 focus:ring-green-500'
+                        : 'text-[#111118] dark:text-white border-[#dcdce5] dark:border-gray-700 focus:ring-primary'
+                    }`}
+                  id="confirm-password"
+                  placeholder="Re-enter your password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                  required
+                />
+                <div className={`flex border bg-white/80 dark:bg-background-dark/50 items-center justify-center pr-[15px] rounded-r-lg border-l-0 ${confirmPasswordError
+                    ? 'text-red-500 border-red-500'
+                    : confirmPassword && !confirmPasswordError
+                      ? 'text-green-500 border-green-500'
+                      : 'border-[#dcdce5] dark:border-gray-700'
+                  }`}>
+                  <span className="material-symbols-outlined">
+                    {confirmPasswordError ? 'error' : confirmPassword && !confirmPasswordError ? 'check_circle' : ''}
+                  </span>
                 </div>
               </div>
-              <p className="text-red-600 dark:text-red-500 text-xs mt-1 px-1">Passwords do not match.</p>
+              {confirmPasswordError && (
+                <p className="text-red-600 dark:text-red-500 text-xs mt-1 px-1">{confirmPasswordError}</p>
+              )}
+              {confirmPassword && !confirmPasswordError && (
+                <p className="text-green-600 dark:text-green-500 text-xs mt-1 px-1">Passwords match!</p>
+              )}
             </div>
             {/* CTA Button */}
-            <button className="w-full mt-4 h-14 flex items-center justify-center rounded-lg bg-primary text-white text-base font-bold leading-normal transition-transform duration-200 hover:scale-105 active:scale-100" type="submit">Create Account</button>
+            <button
+              className="w-full mt-4 h-14 flex items-center justify-center rounded-lg bg-primary text-white text-base font-bold leading-normal transition-transform duration-200 hover:scale-105 active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
           </form>
           {/* Secondary Link & Terms */}
           <div className="w-full mt-6 text-center">
